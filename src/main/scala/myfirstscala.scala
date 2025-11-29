@@ -1,45 +1,32 @@
-import HotelAnalysis.{countRows, loadData, previewData}
+import utils.CsvLoader
+import service.HotelAnalysis
 
-import scala.io.Source
+@main def runAnalysis(): Unit = {
+  println("Loading Data...")
 
-case class HotelBooking(
-                         bookingId: String,
-                         originCountry: String,
-                         hotelName: String,
-                         noOfPeople: Int,
-                         bookingPrice: Double,
-                         discount: String,
-                         profitMargin: Double
-                       )
+  // Load Data
+  val bookings = CsvLoader.loadData("Hotel_Dataset.csv")
+  println(s"Successfully loaded ${bookings.size} records.\n")
+  println("--- Hotel Booking Analysis System ---\n")
 
-object HotelAnalysis {
+  val analyzer = new HotelAnalysis(bookings)
 
-  // function to read CSV file
-  def loadData(filePath: String): List[Array[String]] = {
-    val bufferedSource = Source.fromFile(filePath, "Windows-1252") // specify encoding
-    val data = bufferedSource.getLines().map(_.split(",")).toList
-    bufferedSource.close()
-    data
-  }
+  // Answer Q1
+  val (topCountry, count) = analyzer.getTopCountryWithMostBookings()
+  println(s"1. Country with highest bookings: $topCountry ($count bookings)")
 
-  // Function to show first 5 rows
-  def previewData(data: List[Array[String]]): Unit = {
-    println("Showing first 5 rows:")
-    data.take(5).foreach(row => println(row.mkString(" | ")))
-  }
+  // Answer Q2
+  println("\n2. Most economical options:")
+  val (hotelPrice, avgPrice) = analyzer.getMostEconomicalByPrice()
+  println(f"   a. By Booking Price: $hotelPrice (Avg: $$${avgPrice}%.2f)")
 
-  // Function to count rows
-  def countRows(data: List[Array[String]]): Int = {
-    data.length
-  }
-  
-}
+  val (hotelDiscount, avgDisc) = analyzer.getMostEconomicalByDiscount()
+  println(f"   b. By Discount: $hotelDiscount (Avg: ${avgDisc * 100}%.2f%%)")
 
-def main(args: Array[String]): Unit = {
-  val filePath = "Hotel_Dataset.csv"
+  val (hotelMargin, avgMargin) = analyzer.getMostEconomicalByMargin()
+  println(f"   c. By Profit Margin: $hotelMargin (Avg Margin: ${avgMargin}%.2f)")
 
-  val data = loadData(filePath)
-
-  previewData(data)
-  println(s"Total rows: ${countRows(data)}")
+  // Answer Q3
+  val (profitableHotel, totalProfit, totalVisitors) = analyzer.getMostProfitableHotel()
+  println(f"\n3. Most profitable hotel: \n   $profitableHotel \n   Total Profit: $$${totalProfit}%.2f \n   Total Visitors: $totalVisitors")
 }
