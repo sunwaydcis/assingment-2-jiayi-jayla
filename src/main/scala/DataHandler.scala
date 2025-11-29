@@ -1,5 +1,14 @@
 import scala.io.Source
 
+case class HotelBooking(
+                       originCountry: String,
+                       hotelName: String,
+                       noOfPeople: Int,
+                       bookingPrice: Double,
+                       discount: String,
+                       profitMargin: Double
+                       )
+
 object DataHandler {
 
   // function to read CSV file
