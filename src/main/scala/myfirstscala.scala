@@ -1,6 +1,7 @@
 import scala.io.Source
 
 case class HotelBooking(
+                         bookingId: String,
                          originCountry: String,
                          hotelName: String,
                          noOfPeople: Int,
