@@ -58,4 +58,15 @@ class HotelAnalysis(bookings: List[Booking]) {
     )
   }
 
+  // Q3: Most profitable hotel
+  // Calculation: Sum of (Booking Price * Profit Margin) for all bookings of that hotel
+  def getMostProfitableHotel(): (String, Double, Int) = {
+    bookings.groupBy(_.hotelName)
+      .map { case (hotel, list) =>
+        val totalProfit = list.map(b => b.bookingPrice * b.profitMargin * b.noOfPeople).sum
+        val totalVisitors = list.map(_.noOfPeople).sum
+        (hotel, totalProfit, totalVisitors)
+      }
+      .maxBy(_._2)
+  }
 }
