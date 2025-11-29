@@ -1,3 +1,5 @@
+import HotelAnalysis.{countRows, loadData, previewData}
+
 import scala.io.Source
 
 case class HotelBooking(
@@ -10,7 +12,7 @@ case class HotelBooking(
                          profitMargin: Double
                        )
 
-object DataHandler {
+object HotelAnalysis {
 
   // function to read CSV file
   def loadData(filePath: String): List[Array[String]] = {
@@ -30,13 +32,14 @@ object DataHandler {
   def countRows(data: List[Array[String]]): Int = {
     data.length
   }
+  
+}
 
-  def main(args: Array[String]): Unit = {
-    val filePath = "Hotel_Dataset.csv"
+def main(args: Array[String]): Unit = {
+  val filePath = "Hotel_Dataset.csv"
 
-    val data = loadData(filePath)
+  val data = loadData(filePath)
 
-    previewData(data)
-    println(s"Total rows: ${countRows(data)}")
-  }
+  previewData(data)
+  println(s"Total rows: ${countRows(data)}")
 }
