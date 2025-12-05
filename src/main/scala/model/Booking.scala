@@ -3,6 +3,7 @@ package model
 case class Booking (
                       bookingId: String,
                       destinationCountry: String,
+                      destinationCity: String, 
                       hotelName: String,
                       hotelRating: Double,
                       noOfPeople: Int,
@@ -44,7 +45,8 @@ object Booking {
       
       Some(Booking(
         bookingId = cols(0),
-        originCountry = cols(9),
+        destinationCountry = cols(9),
+        destinationCity = cols(10),
         hotelName = cols(16),
         hotelRating = cols(17).toDouble,
         noOfPeople = cols(11).toInt,

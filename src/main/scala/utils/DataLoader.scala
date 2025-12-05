@@ -2,7 +2,6 @@ package utils
 
 import scala.io.{Codec, Source}
 import model.Booking
-
 import scala.util.{Failure, Success, Try, Using}
 
 trait DataLoader {
