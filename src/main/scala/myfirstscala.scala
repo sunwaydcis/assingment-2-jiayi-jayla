@@ -7,26 +7,46 @@ import service.HotelAnalysis
   // Load Data
   val bookings = CsvLoader.loadData("Hotel_Dataset.csv")
   println(s"Successfully loaded ${bookings.size} records.\n")
-  println("--- Hotel Booking Analysis System ---\n")
+  println("\n==================================================================")
+  println("                   Hotel Booking Analysis System                    ")
+  println("==================================================================\n")
+
 
   val analyzer = new HotelAnalysis(bookings)
 
-  // Answer Q1
+  // ==========================================
+  // EXECUTION OF QUESTION 1 (Loading Data)
+  // ==========================================
   val (topCountry, count) = analyzer.getTopCountryWithMostBookings()
-  println(s"1. Country with highest bookings: $topCountry ($count bookings)")
+  println("--- Question 1: Country with highest bookings ---")
+  println(s"Top Country: $topCountry ($count bookings)")
 
-  // Answer Q2
-  println("\n2. Most economical options:")
-  val (hotelPrice, avgPrice) = analyzer.getMostEconomicalByPrice()
-  println(f"   a. By Booking Price: $hotelPrice (Avg: $$${avgPrice}%.2f)")
+  // ==========================================
+  // EXECUTION OF QUESTION 2
+  // ==========================================
+  println("\n--- Question 2: Best Value Hotel Analysis ---")
+  analyzer.getMostEconomicalHotel(bookings) match {
+    case Some((scoreObj, finalScore)) =>
+      println(s"Top Hotel: ${scoreObj.hotel.toString}")
+      println(f"   Price Score:    ${scoreObj.priceScore}%.2f")
+      println(f"   Discount Score: ${scoreObj.discountScore}%.2f")
+      println(f"   Margin Score:   ${scoreObj.marginScore}%.2f")
+      println(f"   FINAL SCORE:    $finalScore%.2f")
+    case None => println("No data to analyze.")
+  }
 
-  val (hotelDiscount, avgDisc) = analyzer.getMostEconomicalByDiscount()
-  println(f"   b. By Discount: $hotelDiscount (Avg: ${avgDisc * 100}%.2f%%)")
+  // ==========================================
+  // EXECUTION OF QUESTION 3
+  // ==========================================
+  println("\n--- Question 3: Popularity & Performance Analysis ---")
+  analyzer.getMostProfitableHotel(bookings) match {
+    case Some((scoreObj, finalScore)) =>
+      println(s"Top Hotel: ${scoreObj.hotel.toString}")
+      println(f"   Visitor Volume Score: ${scoreObj.visitorScore}%.2f")
+      println(f"   Margin Score:         ${scoreObj.marginScore}%.2f")
+      println(f"   FINAL SCORE:          $finalScore%.2f")
+    case None => println("No data to analyze.")
+  }
 
-  val (hotelMargin, avgMargin) = analyzer.getMostEconomicalByMargin()
-  println(f"   c. By Profit Margin: $hotelMargin (Avg Margin: ${avgMargin}%.2f)")
-
-  // Answer Q3
-  val (profitableHotel, totalProfit, totalVisitors) = analyzer.getMostProfitableHotel()
-  println(f"\n3. Most profitable hotel: \n   $profitableHotel \n   Total Profit: $$${totalProfit}%.2f \n   Total Visitors: $totalVisitors")
+  println("\n==================================================================\n")
 }
